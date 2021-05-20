@@ -150,3 +150,5 @@ The model is based on 'bag of words' and has limitations - words are treated as 
 [f2]: http://chart.apis.google.com/chart?cht=tx&chl=E_k=mc^2-m_0c^2
 
 ![formula](https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1)
+
+<img src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1">
