@@ -42,13 +42,13 @@ The TF-IDF (term frequency-inverse document frequency) matrix tracks a different
 
 The term frequency, as mentioned, is just the sum of the terms in any given document.
 
-<img src="https://render.githubusercontent.com/render/math?math=tf(t,d)=\sum_{t\ind}t">
+<img src="https://render.githubusercontent.com/render/math?math=tf(t,d)=\sum_{t in d}t">
 
 The inverse document frequency is given by: 
 
-<img src="https://render.githubusercontent.com/render/math?math=idf(t)=ln(\frac{N+1}{df(t)+1})+1">
+<img src="https://render.githubusercontent.com/render/math?math=idf(t)=ln(\frac{N + 1}{df(t) + 1}) + 1">
 
-Where $df(t)$ is the number of documents containing term $t$ and $N$ is the total number of documents. The effect of these $+1$ terms on each part of the calculation simulates an extra document added to the data set that contains one instance of every term. This prevents any division by zero errors in our calculations. 
+Where *df(t)* is the number of documents containing term *t* and *N* is the total number of documents. The effect of these *+1* terms on each part of the calculation simulates an extra document added to the data set that contains one instance of every term. This prevents any division by zero errors in our calculations. 
 
 Words that are common in every document would not rank high even if they appear many times.
 
@@ -62,7 +62,7 @@ Under vector representation, the word matrix only required approximately 500 fea
 
 A reason to reduce the dimensions of our feature matrix is motivated by the so-called 'curse of dimensionality'. 
 
-Consider a one-dimensional axis from [0, 1], by definition points on the axis can be at maximum unit 1 distance apart. If we expand this to two dimensions with an X and Y axis, the maximum distance units can be apart is still unit 1 distance, but in two dimensions, points could be at $[0, 1]$ and $[1, 0]$ or $[0, 0]$ and $[1, 1]$. We see that while the distance metric has not changed we have introduced the possibility of significantly more space in our feature space. 
+Consider a one-dimensional axis from [0, 1], by definition points on the axis can be at maximum unit 1 distance apart. If we expand this to two dimensions with an X and Y axis, the maximum distance units can be apart is still unit 1 distance, but in two dimensions, points could be at *[0, 1]* and *[1, 0]* or *[0, 0]* and *[1, 1]*. We see that while the distance metric has not changed we have introduced the possibility of significantly more space in our feature space. 
 
 Expanding to higher dimensions, the sparsity of a many featured dataset becomes obvious and we see that the vast majority of a high-dimensional feature space is empty. Giving us difficulty in training many machine learning models, particularly when geometric distance measures (such as euclidean distance) are used. 
 
@@ -86,7 +86,7 @@ With a score assigned to each variable, we can choose a series of arbitrary thre
 
 # Classification 
 
-Once the list of preprocessed reviews are in vector representation which we call the word matrix, we are ready to train models to perform classification. The dimensions of the word matrix are $m$ x $n$ where $m$ are individual reviews and $n$ are the extracted features.
+Once the list of preprocessed reviews are in vector representation which we call the word matrix, we are ready to train models to perform classification. The dimensions of the word matrix are *m* x *n* where $m$ are individual reviews and *n* are the extracted features.
 
 ## Classification Model Comparison
 
@@ -106,7 +106,7 @@ Given most of the models reached about 80% accuracy, we chose to examine logisti
 
 If there are m reviews, n features, and c in K classes:
 
-Given a $m$ x $n$ word matrix $X$, a $m$ x $k$ $Y$ matrix, we can find a $n$ x $k$ matrix $W$ that holds the coefficients for our logistic regression. Compared to binary classification, this multi classification chooses the class with the highest probability:
+Given a *m* x *n* word matrix *X*, a *m* x *k* *Y* matrix, we can find a $n$ x $k$ matrix $W$ that holds the coefficients for our logistic regression. Compared to binary classification, this multi classification chooses the class with the highest probability:
 
 <img src="https://render.githubusercontent.com/render/math?math=p(y_{i}=c|x_{i}w_{c}) = \frac{1}{1+e^{-w_{c}^{T}x_{i}}}">
 
