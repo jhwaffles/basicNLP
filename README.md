@@ -121,7 +121,7 @@ The probabilities are normalized over the probability sum over all classes. The 
 
 Regularization is also added to the loss function for finding theta. Regularization is especially important in such data sets where there are many features (words) and the matrix is sparse. A L2 regularization is used as it is possible to remove features. 
 
-<img src="https://render.githubusercontent.com/render/math?math= \theta = argmax [\sum_{i=1}^{m}log P(y_{i}|x_{i})]-C\sum^{n}_{j=1} \theta^{2}   ">
+<img src="https://render.githubusercontent.com/render/math?math=\theta=argmax[\sum_{i=1}^{m}log P(y_{i}|x_{i})]-C\sum^{n}_{j=1} \theta^{2}">
 
 To find the best parameters of the logistic regression model, the data set is shuffled and split 80/20 into a training set and a test set. 5-fold cross validation is used on the training set to find the optimal regularization constant C.
 
