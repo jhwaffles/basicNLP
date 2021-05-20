@@ -2,28 +2,23 @@
 
 ## Abstract
 
-In this paper we use a variety of natural language processing (NLP) techniques to synthesize data from Yelp reviews to identify classifiers best suited for review score prediction at various levels of granularity. We explore the impact of pre-processing steps on classifiers, the efficacy of the classifiers themselves and the optimal way to measure our outputs. 
-
-Our data, gathered from the public [Yelp dataset](https://www.yelp.com/dataset/), contains review ratings at the 'star' level from 1-5 which we also group into more general positive, negative and neutral categories (4-5, 1-2 and 3 stars respectively) allowing us to to accept a lower level of specificity in our outputs. 
-
-We also explore various approaches to topic modeling with an independently collected dataset of reviews of a single restaurant, allowing us to understand how customer sentiment and opinion has changed over time, especially since the beginning of the COVID-19 pandemic. 
+In this project we use basic natural language processing (NLP) techniques to classify text data and generate insights. Reviews from a public data set [Yelp dataset](https://www.yelp.com/dataset/) are compiled, preprocessed, and converted to sparse matrix format using a bag of words model. The model is trained and cross-validated on accuracy, sorting reviews into positive, neutral, and negative categories based on keywords. Various classification models are compared. A look into the model output and parameters gives insight onto key parameters that have the greatest influence on prediction.
 
 ## Data Gathering & Pre-Processing Steps
 
-The Yelp dataset is offered as a series of large, compressed JSON files. These files were downloaded, uncompressed, formatted and inserted into a SQLite database for easy access by all project members. Due to the large size of the review dataset, the review table was limited to approximately **50MB** in size. This gave us a reasonable file size to work with while also providing us with an adequate number of reviews.
+The Yelp dataset is offered as a series of large, compressed JSON files. These files were downloaded, uncompressed, formatted and inserted into a SQLite database. Due to the large size of the review dataset, the review table was limited to approximately **50MB** in size. This gave a reasonable file size to work with while also providing us with an adequate number of reviews.
 
 A sample of our review table is shown below: 
 
 
 ![Database Sample](db_sample.png)
 
-From this SQlite data source it is trivial to extract relevant information using Python libraries such as _sqlite3_ and _pandas_ for further analysis.
+From this SQlite data source we can extract relevant information using Python libraries such as _sqlite3_ and _pandas_ for further analysis.
 
 
 ## Pre-Processing Techniques
 
-
-The first, and simplest, step in our pipeline is to remove all stop words i.e. words that are common to the language and provide no useful information. The NLTK Python library provides an english stop word collection of 179 words which we filter out from each of our reviews.
+The first step in our pipeline is to remove all stop words i.e. words that are common to the language and provide no useful information. The NLTK Python library provides an english stop word collection of 179 words which we filter out from each of our reviews.
 
 Next we consider how to normalize our words with respect to tense, context and inflection. Consider the words **caring**, **cared**, and **cares**; clearly here the base form is **care** and ideally we would be able to convert all instances of the derivative words to this base form. 
 
@@ -39,17 +34,11 @@ In our implementation we use the **TextBlob** library to first map the words to 
 
 With this initial processing complete we can move to the creation of our matrix of features. We produced two types of matrix, **Document-Term** and **TF-IDF**. 
 
-### Document-Term Matrix
+### Document-term Matrix
+The document-term matrix is essentially a bag of words model that tracks the occurences of each word in each document, in this case, in each review. This model is basic and doesn't account for grammar or word order. 
 
-Let each row $i$ represent a document processed according to the above steps and each column $j$ represent a unique word in the entirety of the cleaned dataset. An entry $(i, j)$ represents the count of word $j$ in document $i$. 
-
-In our implementation we use single word n-grams for our calculations.
-
-### Term Frequency–Inverse Document Frequency Matrix
-
-Unsurprisingly, the TF-IDF matrix is the product of two statistics, the term frequency and the inverse document frequency. 
-
-The term frequency is a measure of how frequently a word appears in a document, there exist numerous calculations for both statistics and the below examples are from the _sklearn_ Python library, which we used for this project. 
+### TF-IDF
+The TF-IDF (term frequency-inverse document frequency) matrix tracks a different metric the TF-IDF, which is slightly more useful than just the word occurence. TF-IDF matrix is the product of two statistics, the term frequency and the inverse document frequency. The term frequency is a measure of how frequently a word appears in a document, there exist numerous calculations for both statistics and the below examples are from the _sklearn_ Python library, which we used for this project. 
 
 The term frequency, as mentioned, is just the sum of the terms in any given document.
 
@@ -61,14 +50,11 @@ $$ idf(t) = ln(\frac{N + 1}{df(t) + 1}) + 1 $$
 
 Where $df(t)$ is the number of documents containing term $t$ and $N$ is the total number of documents. The effect of these $+1$ terms on each part of the calculation simulates an extra document added to the data set that contains one instance of every term. This prevents any division by zero errors in our calculations. 
 
-A comparison between for the differences between TF-IDF calculations is shown below:
-
-![TF-IDF Comparison](tf_idf_differences.png)
-
+Words that are common in every document would not rank high even if they appear many times.
 
 ## Feature Selection
 
-Both the document-term and TF-IDF matrices are large and sparse. Which could lead to difficulties with various classification algorithms, as such we explore various examples of dimensionality reduction and feature selection.
+Both the document-term and TF-IDF matrices are large and sparse which could lead to difficulties with various classification algorithms, as such we explore various examples of dimensionality reduction and feature selection.
 
 Under vector representation, the word matrix only required approximately 500 features to reach accuracies of 80% - additional features provided diminishing increases in accuracy. See chart _n_features_. Once the top most frequent or most impactful words (TF-IDF) are identified, the remaining features do not influence the classification as significantly. This threshold approach was what we ultimately used, but we also explored alternative avenues of feature selection and dimensionality reduction.
 
@@ -82,21 +68,21 @@ Expanding to higher dimensions, the sparsity of a many featured dataset becomes 
 
 ### Principal Component Analysis 
 
-One 'black box' approach to dimensionality reduction is to take the top 2 principal components of our feature matrix and use these components as our feature matrix.
+For a preview, we can visualize the top 2 principal components of our feature matrix to see how separable the data is.
 
-After performing PCA and extracting the top two components we can plot the positive, negative, and neutral reviews as 2-dimensional heatmaps. Examples are shown below for the document-term matrix: 
+After performing PCA and extracting the top two components we can plot the positive, negative, and neutral reviews as 2-dimensional KDE (kernel density estimation) heatmaps. Examples are shown below for the document-term matrix: 
 
 ![Positive PCA](positive.png)
 ![Negative PCA](negative.png)
 ![Neutral PCA](neutral.png)
 
-We see here there is _some_ degree of visual separation viewable in the 2 principal component space. Ultimately many classifiers will be evaluated to test for performance.
+We see here there is _some_ degree of visual separation viewable in the 2 principal component space.
 
 ### Mutual Information
 
 By performing mutual information regression using the _sklearn_ Python library we are able to produce a mutual information 'score' for each of our features. That is to say we are able to identify words with the highest relevance to predicting a given score count. 
 
-With a score assigned to each variable, we can choose a series of arbitrary thresholds that reduce the size of our feature matrix. The final matrix will still be sizable, perhaps in the hundreds rather than thousands of features, but should be easier for us to work with. 
+With a score assigned to each variable, we can choose a series of arbitrary thresholds that reduce the size of our feature matrix. 
 
 # Classification 
 
