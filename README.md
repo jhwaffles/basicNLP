@@ -42,11 +42,11 @@ The TF-IDF (term frequency-inverse document frequency) matrix tracks a different
 
 The term frequency, as mentioned, is just the sum of the terms in any given document.
 
-$$ tf(t, d) = \sum_{t \in d} t   $$ 
+<img src="https://render.githubusercontent.com/render/math?math= tf(t, d) = \sum_{t \in d} t   ">
 
 The inverse document frequency is given by: 
 
-$$ idf(t) = ln(\frac{N + 1}{df(t) + 1}) + 1 $$
+<img src="https://render.githubusercontent.com/render/math?math=idf(t) = ln(\frac{N + 1}{df(t) + 1}) + 1 ">
 
 Where $df(t)$ is the number of documents containing term $t$ and $N$ is the total number of documents. The effect of these $+1$ terms on each part of the calculation simulates an extra document added to the data set that contains one instance of every term. This prevents any division by zero errors in our calculations. 
 
@@ -108,19 +108,20 @@ If there are m reviews, n features, and c in K classes:
 
 Given a $m$ x $n$ word matrix $X$, a $m$ x $k$ $Y$ matrix, we can find a $n$ x $k$ matrix $W$ that holds the coefficients for our logistic regression. Compared to binary classification, this multi classification chooses the class with the highest probability:
 
-$$ p(y_{i}=c|x_{i}w_{c}) = \frac{1}{1+e^{-w_{c}^{T}x_{i}}}  $$
+<img src="https://render.githubusercontent.com/render/math?math= p(y_{i}=c|x_{i}w_{c}) = \frac{1}{1+e^{-w_{c}^{T}x_{i}}}  ">
 
-$$y_{i} = argmax_{c}(w_{c}^{T}x_{i})   $$
+<img src="https://render.githubusercontent.com/render/math?math= y_{i} = argmax_{c}(w_{c}^{T}x_{i})   ">
+
 
 In multinomial logistic regression, $W$ has 1 column for each label: positive (+1), neutral (0), or negative (-1). Probabilities are calculated with:
 
+<img src="https://render.githubusercontent.com/render/math?math= y_{i} = P(y_{i}=c|x_{i}w_{c})= \frac{exp(x_{i}w_{c}^{T})}{\sum_{c=1}^{K}exp(x_{i}w_{c}^{T})}   ">
 
-$$ P(y_{i}=c|x_{i}w_{c})= \frac{exp(x_{i}w_{c}^{T})}{\sum_{c=1}^{K}exp(x_{i}w_{c}^{T})} $$
 The probabilities are normalized over the probability sum over all classes. The class assigned is ultimately the class $c$ which has the highest probability.
 
 Regularization is also added to the loss function for finding theta. Regularization is especially important in such data sets where there are many features (words) and the matrix is sparse. A L2 regularization is used as it is possible to remove features. 
 
-$$ \theta = argmax [\sum_{i=1}^{m}log P(y_{i}|x_{i})]-C\sum^{n}_{j=1} \theta^{2}  $$
+<img src="https://render.githubusercontent.com/render/math?math= \theta = argmax [\sum_{i=1}^{m}log P(y_{i}|x_{i})]-C\sum^{n}_{j=1} \theta^{2}   ">
 
 To find the best parameters of the logistic regression model, the data set is shuffled and split 80/20 into a training set and a test set. 5-fold cross validation is used on the training set to find the optimal regularization constant C.
 
@@ -145,12 +146,3 @@ It is important to interpret the model performance in terms of the features when
 The output shows the relative importance of words for each class. Important features for the negative class include 'worst','terrible','horrible','gross','disgusting'. This makes sense, as if found in a review, these words unambiguous signs of a bad review. Important features for the positive class include 'excellent','amazing','friendly','wonderful', which are undoubtedly signs of a good review. The important features for the neutral class also make sense which include 'ok','probably','alright' which are signs of a mixed experience. However, some of the features are not as strong indicators such as 'korean' and 'steam'. This explains why the classifier has a more difficult time with neutral reviews.
 
 The model is based on 'bag of words' and has limitations - words are treated as independent features. The same methods were used with the TF-IDF matrix and resulted in similar performance with an accuracy around 80%. Improvements could be done by leveraging the co-occurence of words. Also the model may face difficulty when encountering words not seen in the training set. Some potential improvements to this model could involve leveraging semantics, or word meanings, that are picked up from a large pre-trained data set. However, as a proof of concept, this type of analysis should be applicable to general document classification using textual data. 
-
-![f2]
-[f2]: http://chart.apis.google.com/chart?cht=tx&chl=E_k=mc^2-m_0c^2
-
-![formula](https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1)
-
-<img src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1">
-
-<img src="https://render.githubusercontent.com/render/math?math=tf(t, d) = \sum_{t \in d} t ">
