@@ -152,3 +152,5 @@ The model is based on 'bag of words' and has limitations - words are treated as 
 ![formula](https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1)
 
 <img src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1">
+
+<img src="https://render.githubusercontent.com/render/math?math=tf(t, d) = \sum_{t \in d} t ">
