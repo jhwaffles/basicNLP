@@ -146,5 +146,5 @@ The output shows the relative importance of words for each class. Important feat
 
 The model is based on 'bag of words' and has limitations - words are treated as independent features. The same methods were used with the TF-IDF matrix and resulted in similar performance with an accuracy around 80%. Improvements could be done by leveraging the co-occurence of words. Also the model may face difficulty when encountering words not seen in the training set. Some potential improvements to this model could involve leveraging semantics, or word meanings, that are picked up from a large pre-trained data set. However, as a proof of concept, this type of analysis should be applicable to general document classification using textual data. 
 
-!f2
+![f2]
 [f2]: http://chart.apis.google.com/chart?cht=tx&chl=E_k=mc^2-m_0c^2
